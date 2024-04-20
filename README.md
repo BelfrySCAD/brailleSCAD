@@ -5,13 +5,14 @@
 A library for OpenSCAD to create braille text with automatic (English)
 contractions.  Requires the BOSL2 library.  At the moment only English
 Grade 2 (EBAE) is supported, but expansion to other languages should
-be possible.
+be possible.  
 
 A common misconception is that braille represents English, and other
 languages, by a simple mapping between the letters of the Roman
 alphabet.  In fact, the situation is much more complicated.
 An extensive system of language dependent contractions make braille
-writing more compact.
+writing more compact.  Braille is almost always written in this
+contracted form.  
 
 This library makes use of liblouis, a standard braille contraction
 library, to provide contraction rules for representing English in
@@ -27,6 +28,7 @@ OpenSCAD code.
     - Windows: `My Documents\OpenSCAD\libraries\`
     - Linux: `$HOME/.local/share/OpenSCAD/libraries/`
     - Mac OS X: `$HOME/Documents/OpenSCAD/libraries/`
-5. Restart OpenSCAD.
+5. If you don't have the BOSL2 library then download it and install it in the same way from https://github.com/BelfrySCAD/BOSL2/archive/refs/heads/master.zip
+6. Restart OpenSCAD.
 
 
