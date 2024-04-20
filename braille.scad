@@ -132,6 +132,7 @@ module _braille_dot(radius,height,style)
 //   braille("This is a test.", $fn=22);
 //   braille("The value 44 is smaller than 132.", $fn=22);
 //   braille("Look look LOOK LOOk", $fn=22);
+//   braille("Hello World! Information.",$fn=22);
 // Example: Chaining together rows of braille with left-alignment, where each braile() object is a child of the one before.  Each row is in a different style.  
 //   $fn=22;
 //   cuboid([40, 38, 5]){

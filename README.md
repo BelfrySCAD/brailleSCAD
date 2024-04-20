@@ -1,6 +1,6 @@
 # brailleSCAD
 
-**brailleSCAD: Braille for OpenSCAD with Automatic Contraction**
+**Braille for OpenSCAD with Automatic Contraction**
 
 A library for OpenSCAD to create braille text with automatic (English)
 contractions.  Requires the BOSL2 library.  At the moment only English
