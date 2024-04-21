@@ -14,6 +14,7 @@ DefineHeader(Table;Headers=Name|Definition): Terminology
 DefineHeader(BulletList): Requirements
 DefineSynTags:
   Geom = Can return geometry.
+  Dots = Can return list of braille dots. 
   Mat = Can return a transformation matrix.
   MatList = Can return a list of transformation matrices.
   Path = Can return a Path.

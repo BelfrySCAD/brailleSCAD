@@ -25,7 +25,7 @@
 //   One way to refer to a braille character is to list its dots numerically.  In this library
 //   you can do that by giving a string like "245" or a number like 1246, which specifies
 //   which dots are present in the character.  The number zero indicates an empty cell with no dots.
-// .
+//   .
 //   One might expect a simple mapping between text in a language like English and
 //   the braille characters.  But the situation is much more complex.  Braille takes
 //   up a lot of space so to make texts and books smaller, the convention of using
@@ -33,12 +33,12 @@
 //   strings of letters like "ing" with their own symbol, 346 in the case of "ing".  
 //   The use of contractions various with language and may be complicated by rules
 //   about when exactly contractions can or cannot be used.
-// .
+//   .
 //   This library takes contraction rules from a standard braille library called liblouis
 //   and uses those rules to produce the contracted form ("grade 2") of US English braille,
 //   EBAE (English Braile American Edition).  It may eventually be possible to add other
 //   languages or UEB (Unified English Braille).
-// .
+//   .
 //   Printing braille dots with a FDM printer is challenging.  The dots are very small
 //   so in a horizontal layout, stringing tends to be a severe problem, and the dots develop
 //   undesirable sharp tips.  Printing vertically appears to be much easier.
@@ -96,7 +96,8 @@ module _braille_dot(radius,height,style)
 
 
 // Module: braille()
-// Synopsis: Create braille dots for a text string with transcription to contracted braille.  
+// Synopsis: Create braille dots for a text string with transcription to contracted braille.
+// SynTags: Geom
 // Usage:
 //   braille(text, [size=], [style=], [method=], [anchor=], [orient=], [spin=]) {ATTACHENTS};
 // Description:
@@ -182,8 +183,10 @@ module braille(text,method="en-us-g2",size="small",style="sphere",anchor,orient,
 
 
 // Function: braille_unicode()
+// Synopsis: Convert unicode braille to a braille dots list
+// SynTags: Dots
 // Usage:
-//   braille_unicode(str)
+//   braille_dots = braille_unicode(str);
 // Description:
 //   Converts a string of braille unicode (which may include ASCII space characters)
 //   into a list of braille dot numbers.  This output is suitable
@@ -357,6 +360,8 @@ function _br_repeat_length(text, ind, pattern, totLen=0) =
 
 
 // Function: braille_transcribe()
+// SynTags: Dots
+// Synopsis: Transcribe English text into braille dots
 // Usage:
 //   braille_dots = braille_transcribe(text);
 // Description:
