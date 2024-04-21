@@ -4,8 +4,8 @@
 //   Currently English Grade 2 braille (EBAE) is supported.  
 // Includes:
 //   include <BOSL2/std.scad>
-//   include <en-us-g2.scad>
-//   include <braille.scad>
+//   include <brailleSCAD/en-us-g2.scad>
+//   include <brailleSCAD/braille.scad>
 // FileGroup: Braille
 // FileSummary: Braille dots and transcription
 //////////////////////////////////////////////////////////////////////
@@ -31,7 +31,7 @@
 //   up a lot of space so to make texts and books smaller, the convention of using
 //   braille "contractions" was developed.    These contractions replace longer 
 //   strings of letters like "ing" with their own symbol, 346 in the case of "ing".  
-//   The use of contractions various with language and may be complicated by rules
+//   The use of contractions varies with language and may be complicated by rules
 //   about when exactly contractions can or cannot be used.
 //   .
 //   This library takes contraction rules from a standard braille library called liblouis
@@ -41,7 +41,8 @@
 //   .
 //   Printing braille dots with a FDM printer is challenging.  The dots are very small
 //   so in a horizontal layout, stringing tends to be a severe problem, and the dots develop
-//   undesirable sharp tips.  Printing vertically appears to be much easier.
+//   undesirable sharp tips.  Printing vertically appears to be much easier.  In either case,
+//   it seems unlikely that ADA compliant output is possible.  
 
 
 //include<BOSL2/std.scad>
@@ -94,6 +95,8 @@ module _braille_dot(radius,height,style)
     down(.01)cyl(r=radius, h=height, rounding2=.2,anchor=BOT);
 }
 
+// Section: Braille Modules and Functions
+
 
 // Module: braille()
 // Synopsis: Create braille dots for a text string with transcription to contracted braille.
@@ -127,15 +130,16 @@ module _braille_dot(radius,height,style)
 //   anchor = Translate so anchor point is at the origin (0,0,0).  Default: `CENTER`
 //   spin = Rotate this many degrees around the Z axis after anchor.  Default: 0
 //   orient = Vector to rotate top towards, after spin.  Default: `UP`
-// Examples:
+// Examples(Med,NoAxes):
 //   braille("⠿⠺⠱ ⠞⠉⠀⠇",method="unicode", $fn=32);
 //   braille([123456,1234,123456,15,123456],style="cone",method="dots",$fn=22);
 //   braille(["245","145","","12", 134,346,"1","16"],style="cyl", method="dots", $fn=22);
 //   braille("This is a test.", $fn=22);
+// Examples(Big,NoAxes):
 //   braille("The value 44 is smaller than 132.", $fn=22);
 //   braille("Look look LOOK LOOk", $fn=22);
 //   braille("Hello World! Information.",$fn=22);
-// Example: Chaining together rows of braille with left-alignment, where each braile() object is a child of the one before.  Each row is in a different style.  
+// Example(Med,NoAxes): Chaining together rows of braille with left-alignment, where each braile() object is a child of the one before.  Each row is in a different style.  
 //   $fn=22;
 //   cuboid([40, 38, 5]){
 //     fwd(3)right(4)
@@ -143,7 +147,7 @@ module _braille_dot(radius,height,style)
 //       position(FWD+LEFT)braille("Two", style="cone", anchor=BACK+LEFT)
 //       position(FWD+LEFT)braille("Three", style="cyl", anchor=BACK+LEFT);
 //   }
-// Example: Attaching rows of braille to a face of a cube and then chaining rows with center alignment, where each braille() object is a child of the one before.  This orientation of braille prints better on FDM printers.  
+// Example(Med,NoAxes): Attaching rows of braille to a face of a cube and then chaining rows with center alignment, where each braille() object is a child of the one before.  This orientation of braille prints better on FDM printers.  
 //   cuboid([70, 14, 34]){
 //     up(15)
 //       attach(FRONT)

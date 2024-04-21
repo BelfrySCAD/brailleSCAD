@@ -1,7 +1,7 @@
 DocsDirectory: brailleSCAD.wiki/
 TargetProfile: githubwiki
 ProjectName: brailleSCAD
-GenerateDocs: Files, TOC, Index, Topics, CheatSheet, Sidebar
+GenerateDocs: Files, TOC, Index, CheatSheet, Sidebar
 UsePNGAnimations: Yes
 IgnoreFiles:
   en-us-g2.scad

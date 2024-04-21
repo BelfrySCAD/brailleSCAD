@@ -17,7 +17,12 @@ contracted form.
 This library makes use of liblouis, a standard braille contraction
 library, to provide contraction rules for representing English in
 braille.  Contraction is fully automatic from English text in your
-OpenSCAD code.  
+OpenSCAD code.
+
+## Documentation
+
+You can find the braileSCAD library documentation at
+[https://github.com/BelfrySCAD/brailleSCAD/wiki](https://github.com/BelfrySCAD/brailleSCAD/wiki)
 
 ## Installation
 
