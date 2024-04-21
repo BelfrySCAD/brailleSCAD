@@ -1,0 +1,25 @@
+DocsDirectory: brailleSCAD.wiki/
+TargetProfile: githubwiki
+ProjectName: brailleSCAD
+GenerateDocs: Files, TOC, Index, Topics, CheatSheet, Sidebar
+UsePNGAnimations: Yes
+IgnoreFiles:
+  en-us-g2.scad
+PrioritizeFiles:
+  braille.scad
+DefineHeader(BulletList): Side Effects
+DefineHeader(Table;Headers=Anchor Name|Position): Extra Anchors
+DefineHeader(Table;Headers=Anchor Type|What it is): Anchor Types
+DefineHeader(Table;Headers=Name|Definition): Terminology
+DefineHeader(BulletList): Requirements
+DefineSynTags:
+  Geom = Can return geometry.
+  Mat = Can return a transformation matrix.
+  MatList = Can return a list of transformation matrices.
+  Path = Can return a Path.
+  PathList = Can return a list of Paths.
+  Region = Can return a Region.
+  RegList = Can return a list of Regions.
+  Trans = Can transform children.
+  VNF = Can return a VNF.
+

@@ -5,6 +5,7 @@
 // Includes:
 //   include <BOSL2/std.scad>
 //   include <en-us-g2.scad>
+//   include <braille.scad>
 // FileGroup: Braille
 // FileSummary: Braille dots and transcription
 //////////////////////////////////////////////////////////////////////
@@ -94,11 +95,11 @@ module _braille_dot(radius,height,style)
 }
 
 
-// Module braille()
+// Module: braille()
 // Synopsis: Create braille dots for a text string with transcription to contracted braille.  
 // Usage:
 //   braille(text, [size=], [style=], [method=], [anchor=], [orient=], [spin=]) {ATTACHENTS};
-// Decription:
+// Description:
 //   Displays a row of braille characters.  The interpretation of the `text` argument depends on the specified `method`.
 //   If the `method` is "dots" then `text` is a list of numbers or text string numbers
 //   that list the dots of each character.  These numbers are the standard numerical
@@ -367,7 +368,7 @@ function _br_repeat_length(text, ind, pattern, totLen=0) =
 //   echo(braille_transcribe("This is a test."));  // Returns  [6, 1456, 0, 24, 234, 0, 1, 0, 2345, 15, 34, 256]
 
 
-// Note: checkCaps is needed because various upper case letters exist with no lower case translation,
+// checkCaps is needed because various upper case letters exist with no lower case translation,
 // so we would get an infinite loop if we recurse on such characters.  
 
 function braille_transcribe(text, output=[], ind=0, largesign=false, checkCaps=true, check_num=true) =
