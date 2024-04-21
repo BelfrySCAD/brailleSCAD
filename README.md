@@ -22,7 +22,7 @@ OpenSCAD code.
 ## Documentation
 
 You can find the braileSCAD library documentation at
-[https://github.com/BelfrySCAD/brailleSCAD/wiki](https://github.com/BelfrySCAD/brailleSCAD/wiki)
+[https://github.com/BelfrySCAD/brailleSCAD/wiki/TOC](https://github.com/BelfrySCAD/brailleSCAD/wiki/TOC)
 
 ## Installation
 

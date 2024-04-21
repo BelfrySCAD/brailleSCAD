@@ -42,7 +42,7 @@
 //   Printing braille dots with a FDM printer is challenging.  The dots are very small
 //   so in a horizontal layout, stringing tends to be a severe problem, and the dots develop
 //   undesirable sharp tips.  Printing vertically appears to be much easier.  In either case,
-//   it seems unlikely that ADA compliant output is possible.  
+//   it seems unlikely that ADA compliant output is possible with FDM printing. 
 
 
 //include<BOSL2/std.scad>
@@ -111,8 +111,8 @@ module _braille_dot(radius,height,style)
 //   6 the bottom right dot.  If `method` is "unicode" then the input must be a unicode text string where each character
 //   is either a space or a 6-dot braille unicode character from U+2800 to U+283F.  Finally, `method` can be "un-en-g2",
 //   in which case `text` should be an English language text string, which will be transcribed into contracted
-//   English US grade 2 braille (EBAE).  Note that the en-us-g2.scad transcription table must be included before
-//   braille.scad for transcription to work.  
+//   English US grade 2 braille (EBAE).  Note that the en-us-g2.scad transcription table must be included *before*
+//   braille.scad for the library to work. 
 //   .
 //   At the moment, three styles of braille dot output are supported.  The goal is to identify the best one(s) and remove the rest,
 //   so available styles may change.  
