@@ -19,29 +19,27 @@ sub processRulesFile
 		# die if (m/x2060/);
 		chomp;
 		next if (length ($_) == 0 or m/^\s*#/);
-		s/\\x/\\u/g; # Universal - change \u to \u
+		s/\\x/\\u/g; # Universal - change \x to \u
 		if (m/^\s*include\s+(\S+)/i)
 			{
 			my $dir = dirname ($filename);
 			push (@rules, &processRulesFile ("$dir/$1"));
 			}
 
-		# These are just bogus lines
-		elsif (m/^(space|replace)\s+(\\u2060|\\ufeff)\s+([A-Z].*)/i)
+		elsif (m/^(space|replace)\s+(\\u[0-9a-f][0-9a-f][0-9a-f][0-9a-f])\s+(.*)/i)
 			{
-			my @rule = ($1, $2, "", $3);
+			my @rule = ($1, $2, '0', $3);
 			push (@rules, \@rule);
 			$count++;
 			}
 
-		# Delete  rules with nofor opcode
-		elsif (m/^nofor/)
-			{ next; }
+		# Opcodes to ignore
+		elsif (m/^(comp6|nofor)\b/)
+			{ $count++; }
 
 		# Drop noback opcode but save the rule
 		elsif (m/^noback\s+(\S+)\s+(\S+)\s+(\S+)\s*(.*)/)
 			{
-			#die $filename if ($1 eq 'context');
 			my @rule = ($1, $2, $3, $4);
 			push (@rules, \@rule);
 			$count++;
@@ -56,8 +54,8 @@ sub processRulesFile
 			}
 
 		# Opcodes that take 2 parms.
-		elsif (m/^(lowercase|digit|space|sign|punctuation|math|uppercase|begemphphrase|lenemphphrase|begemphword|endemphword|begemph|endemph|litdigit|prepunc|word|postpunc|begnum|midnum|decpoint|hyphen|always|endword|endnum|repeated|largesign|sufword|begword|midendword|midword|lowword|joinword|prfword|partword|comp6)\s+(\S+)\s+(\S+)\s*(.*)/)
-			{ 
+		elsif (m/^(lowercase|digit|space|sign|punctuation|math|uppercase|begemphphrase|lenemphphrase|begemphword|endemphword|begemph|endemph|litdigit|prepunc|word|postpunc|begnum|midnum|decpoint|hyphen|always|endword|endnum|repeated|largesign|sufword|begword|midendword|midword|lowword|joinword|prfword|partword)\s+(\S+)\s+(\S+)\s*(.*)/)
+			{
 			my @rule = ($1, $2, $3, $4);
 			push (@rules, \@rule);
 			$count++;
@@ -65,13 +63,14 @@ sub processRulesFile
 
 		# Opcodes that take 3 parms.
 		elsif (m/^(base|endemphphrase|nofor)\s+(\S+)\s+(\S+)\s+(\S+)\s*(.*)/)
-			{ 
+			{
 			my @rule = ($1, $2, $3, $4, $5);
 			push (@rules, \@rule);
 			$count++;
 			}
 
-else
+		else
+
 			{
 			warn "[$filename]:\n===\n$_\n===\n";
 			die;
@@ -82,41 +81,37 @@ print ("Processed $count rules.\n") if ($Verbose);
 	return (@rules);
 	} # bus processRulesFile
 
-sub cannonizeDotList
+sub sprint_rule
+	{
+	my $opcode = shift;
+	my $comment = pop; # Discard comment
+
+	my @parms;
+	foreach my $junk (@_)
+		{
+		if ($junk =~ m/^[0-9][0-9\-]*$/)
+			{ push (@parms, &cannonize_dot_list ($junk)); }
+		else
+			{
+			$junk =~ s/^"([^"]*)"$/\1/g; # Remove opening/closing quotes
+			$junk =~ s/"/\\"/g; # Escape remaining quotes
+			$junk =~ s/^(..*)/"\1"/; # Add back the quotes for strings
+			$junk =~ s/\\s/ /g; # Change \s to space
+			push (@parms, $junk);
+			} # esle
+		} # elihw
+	my $line = sprintf ("[\"%s\", %s]", $opcode, join (", ", @parms));
+	return ($line);
+	} # bus sprint_rule
+
+sub cannonize_dot_list
 	{
 	my $arg = shift;
 	$arg =~ s/[^-]*[^1-6\-]+[^-]*/0/g;;
-	my $str = join (',', map (sprintf ("%01d", $_), split (('-', $arg))));
+	my @list = map (sprintf ("%01d", $_), split (('-', $arg)));
+	my $str = sprintf ("[%s]", join (',', @list));
 	return ($str);
-	} # bus arg2array
-
-sub sprintRule
-	{
-	my $rule = shift;
-
-	my $opcode = shift (@$rule);
-	my $comment = pop (@$rule);
-	$comment =~ s/#//;
-	$comment =~ s/\s+/ /g;
-	$comment =~ s/^\s+//g;
-	$comment =~ s/\s+$//g;
-
-	my $num = $#$rule;
-	for (my$idx=0; $idx<=$num; $idx++)
-		{
-		if ($rule->[$idx] =~ m/^[0-9\-]+$/)
-			{ $rule->[$idx] = '[' . &cannonizeDotList ($rule->[$idx]) . ']'; } # fi
-		else
-			{
-			$rule->[$idx] =~ s/^"([^"]*)"$/\1/g; # Remove opening/closing quotes
-			$rule->[$idx] =~ s/"/\\"/g; # Escape remaining quotes
-			$rule->[$idx] =~ s/\\s/ /g; # Chage \s to space
-			$rule->[$idx] =~ s/^(..*)/"\1"/; # Add back the quotes for strings
-			} # esle
-		} # rof
-	my $line = sprintf ("[\"%s\", %s]", $opcode, join (", ", @$rule));
-	return ($line, $comment);
-} # bus sprintRule
+	} # bus cannonize_dot_list
 
 ### MAIN ###
 my $Self = basename ($0);
@@ -145,6 +140,7 @@ my $characterClasses = {
 	'litdigit' => '',
 	'lowercase' => '',
 	'math' => '',
+	# 'postpunc' => '',
 	'noletsignafter' => '',
 	'punctuation' => '',
 	'sign' => '',
@@ -152,14 +148,17 @@ my $characterClasses = {
 	'uppercase' => ''};
 foreach my $rule (@rules)
 	{
+	map {s/\\s/ /g; } @$rule;
 	if (defined ($characterClasses->{$rule->[0]}))
 		{ $characterClasses->{$rule->[0]} .= $rule->[1]; }
-	} # hcaerof
+	elsif ($rule->[0] eq "base" and defined ($characterClasses->{$rule->[1]}))
+		{ $characterClasses->{$rule->[1]} .= $rule->[2]; }
+		} # hcaerof
 foreach my $class (sort keys %$characterClasses)
 	{
 	next if ($class eq 'digit');
 	$characterClasses->{$class} =~ s/"/\\"/g;
-	printf ("%s = \"%s\";\n", $class, $characterClasses->{$class});
+	printf ("_br_%s = \"%s\";\n", $class, $characterClasses->{$class});
 	} # hcaerof
 print ("\n");
 
@@ -176,11 +175,12 @@ printf ("braille_case_table = [[\"%s\"], [\"%s\"]];\n\n", $upper, $lower);
 my @lines = ();
 foreach my $rule (@rules)
 	{
-	if (defined ($characterClasses->{$rule->[0]}) and ($rule->[0] ne 'digit'))
+	if (defined ($characterClasses->{$rule->[0]}) and not ($rule->[0] eq 'digit' or $rule->[0] eq 'noletsignafter'))
 		{
-		$rule->[1] =~ s/"/\\"/g;
-		$rule->[2] = &cannonizeDotList ($rule->[2]);
-		my $line = sprintf ("[\"%s\", %s]", $rule->[1], $rule->[2]);
+		my $char = $rule->[1];
+		$char = '\"' if $char eq '"';
+		my $dots = &cannonize_dot_list ($rule->[2]);
+		my $line = sprintf ("[\"%s\", %s]", $char, $dots);
 		push (@lines, $line);
 		}
 	} # hcaerof
@@ -192,10 +192,9 @@ foreach my $rule (@rules)
 	{
 	next if ($rule->[0] eq "base" and $rule->[1] eq "uppercase");
 	next if (defined ($characterClasses->{$rule->[0]}));
-	my ($line, $comment) = sprintRule ($rule, ",");
-	push (@lines, [$line, $comment]);
+	my $line = &sprint_rule (@$rule);
+push (@lines, $line);
 	} # hcaerof
-printf ("braille_table = [\n %s\n  ];\n", join (",\n  ", map ($_->[0], @lines)));
-
+printf ("braille_table = [\n %s\n  ];\n", join (",\n  ", @lines));
 printf ("// EOF");
 # EOF
